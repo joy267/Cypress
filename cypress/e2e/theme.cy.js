@@ -1,6 +1,7 @@
+import login from "../support/pageObjects/login"
+
 describe ('Theme', () => {
 
-    const baseURL = 'https://aladdin-ui-stage.etloptival.com/'
     const username = 'tester@etloptival.com'
     const password = 'soliva@123'
     const sitedropdown = 'input[placeholder="Search site name or choose from the list"]'
@@ -8,12 +9,12 @@ describe ('Theme', () => {
 
     beforeEach( () => {
 
-        cy.visit(baseURL)
+        login.baseURL()
 
         // Login
-        cy.get('input[placeholder="Enter Your Email"]').type(username)
-        cy.get('input[id=":r1:"]').type(password)
-        cy.contains('button', 'LOGIN NOW').click()
+        login.enterUsername('tester@etloptival.com')
+        login.enterPassword('soliva@123')
+        login.clickLogin()
 
         // Wait for dashboard or assets to load
         cy.get('div[aria-label="Assets"]', {timeout:10000}).should('be.visible').click()
