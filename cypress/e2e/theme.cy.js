@@ -46,6 +46,26 @@ describe ('Theme', () => {
         cy.contains('button', 'Close', {timeout:10000}).should('be.visible').click()
     })
 
+    it('Should not create a duplicate theme', () => {
+
+        cy.contains('button', 'Create Theme', {timeout:10000}).should('be.visible').click()
+        const theme_name = `NJ - Generic1`
+        cy.get('#outlined-multiline-flexible',{timeout:10000}).should('be.visible').click().type(theme_name, { parseSpecialCharSequences: false })
+
+        // Enter empty JSON object
+        cy.get('div[class="ace_content"]').type('{}')
+
+        // Select a template from dropdown
+        cy.get(select_template, {timeout:10000}).should('be.visible').first().click()
+        cy.get(select_template).first().type('{downarrow}{enter}')
+
+        // Submit creation
+        cy.contains('button', 'Create Theme').click()
+
+        // Duplicate
+        cy.contains('div','Theme name must be unique', {timeout:10000}).should('be.visible').click()
+    })
+
     it('Should edit an excisting theme successfully', () => {
 
         // Open first theme edit icon
