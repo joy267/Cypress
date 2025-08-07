@@ -2,8 +2,8 @@ import login from "../support/pageObjects/login"
 
 describe ('Theme', () => {
 
-    const username = 'tester@etloptival.com'
-    const password = 'soliva@123'
+    // const username = 'tester@etloptival.com'
+    // const password = 'soliva@123'
     const sitedropdown = 'input[placeholder="Search site name or choose from the list"]'
     const select_template = 'input[placeholder="Please select a Template from the list."]'
 
@@ -46,7 +46,7 @@ describe ('Theme', () => {
         cy.contains('button', 'Close', {timeout:10000}).should('be.visible').click()
     })
 
-    it('Should not create a duplicate theme', () => {
+    it('Should not create a theme with existing name', () => {
 
         cy.contains('button', 'Create Theme', {timeout:10000}).should('be.visible').click()
         const theme_name = `NJ - Generic1`
@@ -66,7 +66,7 @@ describe ('Theme', () => {
         cy.contains('div','Theme name must be unique', {timeout:10000}).should('be.visible').click()
     })
 
-    it('Should edit an excisting theme successfully', () => {
+    it('Should edit an existing theme successfully', () => {
 
         // Open first theme edit icon
         cy.get('svg[data-testid="CreateOutlinedIcon"]',{timeout:10000}).should('be.visible').first().click()
@@ -77,6 +77,24 @@ describe ('Theme', () => {
         // Assert success or confirmation modal/dialog
         cy.contains('button', 'Close', {timeout:10000}).should('be.visible').click()
 
+    })
+
+    it('Should be able create a duplicate theme', () => {
+        cy.get('button[aria-label="Duplicate"]', {timeout:10000}).should('be.visible').first().click()
+        cy.get('button[data-tracker="143"]').click()
+    })
+
+    it('Should work the Search, Filter and More Info fuctionality', () => {
+        cy.get('button[aria-label="Open"]',{timeout:10000}).eq(1).should('be.visible').click().type("NJ - Generic1").type('{downarrow}{downarrow}{downarrow}{enter}')
+        cy.contains('button', 'Groups', {timeout:10000}).click()
+        cy.get('div[data-tracker="247"]').click().type('Information-copy')
+        cy.get('input[type="checkbox"]').eq(1).click()
+        cy.contains('button', 'features', {timeout:10000}).click()
+        // cy.get('div[data-tracker="247"]').click().type('Banners - All Devices')
+        // cy.get('input[type="checkbox"]').eq(0).click()
+        cy.contains('button', 'Clear Filter', {timeout:10000}).click()
+        cy.get('button[aria-label="expand row"]', {timeout:10000}).first().click()
+        cy.get('button[aria-label="expand row"]', {timeout:10000}).first().click()
     })
 
 })
